@@ -20,12 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function Films() {
     fetch('http://localhost:3000/films')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Unable to fetch films');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(films => {
             const filmsList = document.getElementById('films');
             filmsList.innerHTML = '';
@@ -43,19 +38,15 @@ function Films() {
             filmsList.querySelectorAll('.delete-film').forEach(button => {
                 button.addEventListener('click', deleteFilm);
             });
-        })
-        .catch(error => {
-            console.error('Error loading films:', error);
         });
 }
+
 
 // Create a list item for each film
 function createFilmItem(film) {
     const filmLi = document.createElement('li');
     filmLi.className = 'film';
     filmLi.dataset.id = film.id;
-    filmLi.dataset.ticketsSold = film.tickets_sold; // Added ticketsSold data attribute
-    filmLi.dataset.capacity = film.capacity; // Added capacity data attribute
 
     const titleSpan = document.createElement('span');
     titleSpan.innerText = film.title;
@@ -75,15 +66,18 @@ function createFilmItem(film) {
     return filmLi;
 }
 
+
+
 // Update movie details in the DOM
 function updateMovieDetails(movie) {
     document.getElementById('poster').src = movie.poster;
     document.getElementById('title').innerText = movie.title;
-    document.getElementById('runtime').innerText = `${movie.runtime} minutes`; // Corrected to use template literals
+    document.getElementById('runtime').innerText = `${movie.runtime} minutes`; // Fixed template literal
     document.getElementById('showtime').innerText = movie.showtime;
     document.getElementById('ticket-num').innerText = movie.tickets_sold;
     document.getElementById('film-info').innerText = movie.description;
 }
+
 
 // Handle the 'Buy Ticket' button click
 function buyTicket(event) {
@@ -111,14 +105,13 @@ function buyTicket(event) {
                 event.target.textContent = 'Sold Out';
                 filmLi.classList.add('sold-out');
             }
-        })
-        .catch(error => {
-            console.error('Error updating ticket sales:', error);
         });
     } else {
         alert('Sold Out');
     }
 }
+
+
 
 // Handle the 'Delete' button click
 function deleteFilm(event) {
@@ -135,3 +128,4 @@ function deleteFilm(event) {
         console.error('Unable to delete the film:', error);
     });
 }
+
